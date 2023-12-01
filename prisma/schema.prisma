@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL")
+  directUrl         = env("POSTGRES_URL_NON_POOLING")
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Act {
+  id          String    @id @default(cuid()) @db.VarChar(32)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  description String?
+  beats       Beat[]
+  BeatSheet   BeatSheet @relation(fields: [beatSheetId], references: [id], onDelete: Cascade)
+  beatSheetId String    @db.VarChar(32)
+}
+
+model Beat {
+  id          String   @id @default(cuid()) @db.VarChar(32)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  cameraAngle String?
+  description String?
+  duration    String?
+  title       String
+  Act         Act      @relation(fields: [actId], references: [id], onDelete: Cascade)
+  actId       String   @db.VarChar(32)
+}
+
+model BeatSheet {
+  id        String   @id @default(cuid()) @db.VarChar(32)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  acts      Act[]
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  String?
+}
+
+model User {
+  id         String      @id @default(cuid()) @db.VarChar(32)
+  email      String      @unique
+  password   String
+  firstName  String?
+  lastName   String?
+  beatsheets BeatSheet[]
+}
