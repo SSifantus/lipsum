@@ -16,13 +16,13 @@ export default async function middleware(req: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
 
-  const publicRoutes = ["/login", "/register"];
-  if (!session && !publicRoutes.includes(path)) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
-  if (session && publicRoutes.includes(path)) {
-    return NextResponse.redirect(new URL("/beatsheets", req.url));
-  }
+  // const publicRoutes = ["/login", "/register"];
+  // if (!session && !publicRoutes.includes(path)) {
+  //   return NextResponse.redirect(new URL("/login", req.url));
+  // }
+  // if (session && publicRoutes.includes(path)) {
+  //   return NextResponse.redirect(new URL("/", req.url));
+  // }
   return NextResponse.next();
 }
 
