@@ -9,7 +9,7 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const title = "Beat Manager";
+const title = "Lipsum";
 const description = "An application for managing beat sheets.";
 
 export const metadata: Metadata = {

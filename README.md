@@ -1,4 +1,4 @@
-## Beat Manager
+## Lipsum
 This application manages beat sheets for video creators. It is built with Next.js, Prisma, PostgreSQL, and Next-Auth 
 and is hosted on Vercel.
 
