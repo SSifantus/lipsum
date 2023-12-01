@@ -2,14 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --foreground-rgb: 0,0,0;
+  --background-start-rgb: 214,219,220;
+  --background-end-rgb: 255,255,255;
+}
+
 body {
-  background-color: rgba(23, 23, 23, 1);
+  background: linear-gradient(to bottom,transparent,rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
   color: #eee;
 }
 
 header {
   align-items: center;
-  background-color: #010101;
+  background: #010101 url("/images/bg.jpg") no-repeat 0 -100px;
   color: #fff;
   display: flex;
   height: 80px;
