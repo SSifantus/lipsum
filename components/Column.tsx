@@ -15,8 +15,10 @@ export type ColumnProps = {
 export default function Column({ type }: ColumnProps) {
   return (
     <div className={`column type-${type}`}>
-
-      Column {type}
+      <div className="drawer" />
+      <div className="handle">
+        {type}
+      </div>
     </div>
   );
 }
