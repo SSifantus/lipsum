@@ -1,3 +1,7 @@
+"use client";
+
+import React, { useEffect, useRef } from "react";
+import { useMousePosition } from "hooks/useMousePosition";
 
 export const ColumnTypes = {
   characters: "characters",
@@ -13,11 +17,23 @@ export type ColumnProps = {
 }
 
 export default function Column({ type }: ColumnProps) {
+  const columnRef = useRef<HTMLDivElement>(null);
+  const mousePosition = useMousePosition(columnRef);
+
+
+  useEffect(() => {
+
+    console.log('Mouse position:', mousePosition);
+    console.log('columnRef:', columnRef.current?.id);
+  }, [mousePosition]);
+
+
   return (
-    <div className={`column type-${type}`}>
-      <div className="drawer" />
-      <div className="handle">
-        {type}
+    <div ref={columnRef} id={type} className={`column type-${type}`}>
+      <div className="drawer">
+        <div className="handle">
+          {type}
+        </div>
       </div>
     </div>
   );
