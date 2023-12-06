@@ -18,18 +18,18 @@ export type ColumnProps = {
 
 export default function Column({ type }: ColumnProps) {
   const columnRef = useRef<HTMLDivElement>(null);
-  const mousePosition = useMousePosition(columnRef);
+  const [ref, mousePosition] = useMousePosition();
 
 
   useEffect(() => {
 
     console.log('Mouse position:', mousePosition);
-    console.log('columnRef:', columnRef.current?.id);
+    console.log('columnRef:', ref?.id);
   }, [mousePosition]);
 
 
   return (
-    <div ref={columnRef} id={type} className={`column type-${type}`}>
+    <div ref={ref} id={type} className={`column type-${type}`}>
       <div className="drawer">
         <div className="handle">
           {type}

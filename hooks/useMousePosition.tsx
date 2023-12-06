@@ -1,24 +1,34 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-export const useMousePosition = (ref: React.RefObject<HTMLElement | null>) => {
+export const useMousePosition = () => {
   const [mousePosition, setMousePosition] = useState({ x: null, y: null });
 
-  useEffect(() => {
 
-      const updateMousePosition = (ev: MouseEvent) => {
-        const bounds = ref.current.getBoundingClientRect();
-        const x = ev.clientX - bounds.left;
-        const y = ev.clientY - bounds.top;
-        setMousePosition({x, y});
-      };
+  const handleMouseMove = useCallback(
+    (e) =>
+      setMousePosition({
+        x: e.pageX,
+        y: e.pageY,
+      }),
+    []
+  );
 
-      window.addEventListener('mousemove', updateMousePosition);
+  const ref = useRef<HTMLDivElement>(null);
 
-      return () => {
-        window.removeEventListener('mousemove', updateMousePosition);
-      };
-  }, []);
+  const callbackRef = useCallback(
+    (node) => {
+      if (ref.current) {
+        ref.current.removeEventListener("mousemove", handleMouseMove);
+      }
 
+      ref.current = node;
 
-  return mousePosition;
+      if (ref.current) {
+        ref.current.addEventListener("mousemove", handleMouseMove);
+      }
+    },
+    [handleMouseMove]
+  );
+
+  return [callbackRef, mousePosition];
 };
