@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
+import { ThemeProvider } from 'next-themes';
 import '../styles/globals.css';
 
 export const metadata: Metadata = {
@@ -17,13 +18,19 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <head>
                 <link rel="icon" href="/favicon.svg" sizes="any" />
             </head>
             <body className="antialiased">
-                        <main className="grow">{children}</main>
-
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    <main className="grow">{children}</main>
+                </ThemeProvider>
             </body>
         </html>
     );
