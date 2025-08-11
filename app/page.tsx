@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Button } from "@/components/ui/button";
 import { Card } from 'components/card';
 import { ContextAlert } from 'components/context-alert';
 import { Markdown } from 'components/markdown';
@@ -33,6 +34,7 @@ export default function Page() {
                 <Link href="https://docs.netlify.com/frameworks/next-js/overview/" className="btn btn-lg sm:min-w-64">
                     Read the Docs
                 </Link>
+              <Button>Hello World</Button>
             </section>
             {!!ctx && (
                 <section className="flex flex-col gap-4">
