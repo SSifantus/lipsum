@@ -3,7 +3,12 @@ import Link from 'next/link';
 import netlifyLogo from 'public/netlify-logo.svg';
 import githubLogo from 'public/images/github-mark-white.svg';
 
-const navItems = [
+interface NavItem {
+    linkText: string;
+    href: string;
+}
+
+const navItems: NavItem[] = [
     { linkText: 'Home', href: '/' },
     { linkText: 'Revalidation', href: '/revalidation' },
     { linkText: 'Image CDN', href: '/image-cdn' },

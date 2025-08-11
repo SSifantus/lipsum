@@ -2,8 +2,9 @@ import { revalidateTag } from 'next/cache';
 import { Card } from 'components/card';
 import { Markdown } from 'components/markdown';
 import { SubmitButton } from 'components/submit-button';
+import type { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
     title: 'On-Demand Revalidation'
 };
 
@@ -37,6 +38,17 @@ In real-life applications, tags are typically invalidated when data has changed 
 For this functionality to work, Next.js uses the [fine-grained caching headers](https://docs.netlify.com/platform/caching/) available on Netlify - but you can use these features on basically any Netlify site!
 `;
 
+interface WikiArticle {
+    title: string;
+    description: string;
+    extract: string;
+    content_urls: {
+        desktop: {
+            page: string;
+        };
+    };
+}
+
 export default async function Page() {
     async function revalidateWiki() {
         'use server';
@@ -60,7 +72,7 @@ async function RandomWikiArticle() {
         next: { revalidate: revalidateTTL, tags: [tagName] }
     });
 
-    const content = await randomWiki.json();
+    const content: WikiArticle = await randomWiki.json();
     let extract = content.extract;
     if (extract.length > maxExtractLength) {
         extract = extract.slice(0, extract.slice(0, maxExtractLength).lastIndexOf(' ')) + ' [...]';

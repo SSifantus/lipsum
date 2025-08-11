@@ -3,8 +3,9 @@ import { ImageWithSizeOverlay } from './image-with-size-overlay';
 import { ContextAlert } from 'components/context-alert';
 import { Markdown } from 'components/markdown';
 import { getNetlifyContext } from 'utils';
+import type { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
     title: 'Image CDN'
 };
 
@@ -94,14 +95,14 @@ export default function Page() {
                 <Markdown content={originalVsCdnSnippet} className="mb-8" />
                 <figure
                     className="relative grid w-full overflow-hidden border-2 border-white rounded-lg select-none diff aspect-3/2"
-                    tabIndex="0"
+                    tabIndex={0}
                 >
                     <div className="relative col-start-1 row-start-1 overflow-hidden border-r-2 z-1 border-r-white diff-item-1">
                         <div>
                             <ImageWithSizeOverlay src="/images/corgi.jpg" />
                         </div>
                     </div>
-                    <div className="relative col-start-1 row-start-1 diff-item-2" tabIndex="0">
+                    <div className="relative col-start-1 row-start-1 diff-item-2" tabIndex={0}>
                         <div>
                             <ImageWithSizeOverlay
                                 srcSet={sampleImageSrcSet}

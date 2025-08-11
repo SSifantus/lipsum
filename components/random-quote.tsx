@@ -3,18 +3,27 @@
 import { useEffect, useState } from 'react';
 import { Card } from './card';
 
+interface Quote {
+    text: string;
+    playedBy: string;
+    character: string;
+    film: string;
+    year: number;
+    dataSource: string;
+}
+
 const randomQuoteUrl = '/quotes/random';
 
 export function RandomQuote() {
-    const [quote, setQuote] = useState(null);
-    const [time, setTime] = useState(null);
+    const [quote, setQuote] = useState<Quote | null>(null);
+    const [time, setTime] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchQuote = async () => {
             try {
                 const response = await fetch(randomQuoteUrl, { cache: 'no-store' });
                 if (response) {
-                    const data = await response.json();
+                    const data: Quote = await response.json();
                     setQuote(data);
                     setTime(new Date().toLocaleString());
                 }

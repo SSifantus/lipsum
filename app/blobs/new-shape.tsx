@@ -6,9 +6,22 @@ import { ShapeRenderer } from './renderer';
 import { uploadShapeAction } from './actions';
 import { uploadDisabled } from 'utils';
 
-export function NewShape(props) {
+interface NewShapeProps {
+    setLastMutationTime: (time: number) => void;
+}
+
+interface BlobData {
+    parameters: {
+        name: string;
+        colors: string[];
+        [key: string]: any;
+    };
+    svgPath: string;
+}
+
+export function NewShape(props: NewShapeProps) {
     const { setLastMutationTime } = props;
-    const [blobData, setBlobData] = useState();
+    const [blobData, setBlobData] = useState<BlobData>();
     const [wasUploaded, setWasUploaded] = useState(false);
 
     const randomizeBlob = () => {
@@ -17,9 +30,11 @@ export function NewShape(props) {
     };
 
     const onUpload = async () => {
-        await uploadShapeAction({ parameters: blobData.parameters });
-        setWasUploaded(true);
-        setLastMutationTime(Date.now());
+        if (blobData) {
+            await uploadShapeAction({ parameters: blobData.parameters });
+            setWasUploaded(true);
+            setLastMutationTime(Date.now());
+        }
     };
 
     useEffect(() => {

@@ -1,4 +1,15 @@
-export function Alert({ children, className, type }) {
+interface AlertProps {
+    children: React.ReactNode;
+    className?: string;
+    type?: 'success' | 'error' | 'info';
+}
+
+interface AlertIconProps {
+    type?: 'success' | 'error' | 'info';
+    className?: string;
+}
+
+export function Alert({ children, className, type }: AlertProps) {
     return (
         <div
             className={[
@@ -15,7 +26,7 @@ export function Alert({ children, className, type }) {
     );
 }
 
-function AlertIcon({ type, className }) {
+function AlertIcon({ type, className }: AlertIconProps) {
     switch (type) {
         case 'success':
             return (

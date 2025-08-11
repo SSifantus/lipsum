@@ -1,8 +1,23 @@
 import MarkdownToJsx from 'markdown-to-jsx';
 import { CodeBlock } from './code-block';
 
-export function Markdown({ content, className }) {
-    const HighlightedCodeBlock = ({ children }) => {
+interface MarkdownProps {
+    content: string;
+    className?: string;
+}
+
+interface HighlightedCodeBlockProps {
+    children: {
+        props?: {
+            className?: string;
+            children?: string;
+            title?: string;
+        };
+    };
+}
+
+export function Markdown({ content, className }: MarkdownProps) {
+    const HighlightedCodeBlock = ({ children }: HighlightedCodeBlockProps) => {
         const { props } = children;
         const matchLanguage = /lang-(\w+)/.exec(props?.className || '');
         return (

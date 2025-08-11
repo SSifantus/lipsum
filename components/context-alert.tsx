@@ -7,11 +7,16 @@ For full functionality, either run this site locally via \`netlify dev\`
 ([see docs](https://docs.netlify.com/cli/local-development/")) or deploy it to Netlify.
 `;
 
-export function ContextAlert(props) {
+interface ContextAlertProps {
+    addedChecksFunction?: (context: string) => string;
+    className?: string;
+}
+
+export function ContextAlert(props: ContextAlertProps) {
     const { addedChecksFunction, className } = props;
     const ctx = getNetlifyContext();
 
-    let markdownText = null;
+    let markdownText: string | null = null;
     if (!ctx) {
         markdownText = noNetlifyContextAlert;
     } else if (addedChecksFunction) {

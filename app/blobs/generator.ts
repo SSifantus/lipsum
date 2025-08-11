@@ -12,14 +12,28 @@ const gradientColors = [
 
 export const fixedSize = 512;
 
+interface BlobParameters {
+    seed?: number | null;
+    edges?: number;
+    growth?: number;
+    colors?: string[];
+    name?: string;
+    [key: string]: any;
+}
+
+interface BlobResult {
+    parameters: BlobParameters;
+    svgPath: string;
+}
+
 /*
 If given existing parameters, creates SVG path based on it (so you can store just the params, not the actual path).
 If not, creates new parameter values first.
 
 Returns { parameters, svgPath }.
 */
-export function generateBlob(parameters) {
-    parameters = {
+export function generateBlob(parameters?: Partial<BlobParameters>): BlobResult {
+    const fullParameters: BlobParameters = {
         seed: null,
         edges: randomInt(3, 20),
         growth: randomInt(2, 9),
@@ -29,6 +43,6 @@ export function generateBlob(parameters) {
     };
 
     // If seed is not given, a new seed is generated and returned (so it can be stored)
-    const { path: svgPath, seedValue: seed } = blobshape({ ...parameters, size: fixedSize });
-    return { parameters: { ...parameters, seed }, svgPath };
+    const { path: svgPath, seedValue: seed } = blobshape({ ...fullParameters, size: fixedSize });
+    return { parameters: { ...fullParameters, seed }, svgPath };
 }

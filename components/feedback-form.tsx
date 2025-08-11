@@ -1,19 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { Alert } from './alert';
 import { Card } from './card';
 
-export function FeedbackForm() {
-    const [status, setStatus] = useState(null);
-    const [error, setError] = useState(null);
+type FormStatus = 'pending' | 'ok' | 'error' | null;
 
-    const handleFormSubmit = async (event) => {
+export function FeedbackForm() {
+    const [status, setStatus] = useState<FormStatus>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
             setStatus('pending');
             setError(null);
-            const myForm = event.target;
+            const myForm = event.currentTarget;
             const formData = new FormData(myForm);
             const res = await fetch('/__forms.html', {
                 method: 'POST',

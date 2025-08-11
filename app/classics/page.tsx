@@ -1,7 +1,8 @@
 import { FeedbackForm } from 'components/feedback-form';
 import { Markdown } from 'components/markdown';
+import type { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
     title: 'Classics'
 };
 
