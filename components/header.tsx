@@ -17,7 +17,7 @@ const navItems: NavItem[] = [
     { linkText: 'Classics', href: '/classics' }
 ];
 
-export function Header() {
+export const Header = () => {
     return (
         <nav className="flex flex-wrap items-center gap-4 pt-6 pb-12 sm:pt-12 md:pb-24">
             <Link href="/">
@@ -44,4 +44,5 @@ export function Header() {
             </Link>
         </nav>
     );
-}
+};
+

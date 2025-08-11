@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 import { Card } from 'components/card';
 import { ContextAlert } from 'components/context-alert';
 import { Markdown } from 'components/markdown';

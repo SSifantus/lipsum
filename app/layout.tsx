@@ -1,17 +1,18 @@
-import '../styles/globals.css';
-import { Footer } from '../components/footer';
-import { Header } from '../components/header';
+import { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import { Footer } from '@/components/footer';
+import { Header } from '@/components/header';
+import '../styles/globals.css';
 
 export const metadata: Metadata = {
     title: {
-        template: '%s | Netlify',
-        default: 'Netlify Starter'
+        template: '%s | Lipso',
+        default: 'Lorem Ipsum Generator'
     }
 };
 
 interface RootLayoutProps {
-    children: React.ReactNode;
+    children: ReactNode;
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
