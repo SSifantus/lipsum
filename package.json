@@ -14,15 +14,15 @@
         "bright": "^0.8.5",
         "markdown-to-jsx": "^7.4.5",
         "next": "15.4.6",
-        "react": "18.3.1",
-        "react-dom": "18.3.1",
+        "react": "19.1.1",
+        "react-dom": "19.1.1",
         "unique-names-generator": "^4.7.1"
     },
     "devDependencies": {
-        "@tailwindcss/postcss": "^4.0.15",
-        "eslint": "8.57.1",
+        "@tailwindcss/postcss": "^4.1.11",
+        "eslint": "9.33.0",
         "eslint-config-next": "15.4.6",
-        "postcss": "^8.4.36",
-        "tailwindcss": "^4.0.15"
+        "postcss": "^8.5.6",
+        "tailwindcss": "^4.1.11"
     }
 }
