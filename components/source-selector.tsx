@@ -1,13 +1,4 @@
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import * as React from "react";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 
 export function SourceSelector() {
   return (
@@ -17,7 +8,6 @@ export function SourceSelector() {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Source Texts</SelectLabel>
           <SelectItem value="ipsum">Lorem Ipsum</SelectItem>
           <SelectItem value="business">Corporate</SelectItem>
         </SelectGroup>
