@@ -17,21 +17,21 @@ const panes = [
     id: "words",
     step: 1,
     min: 0,
-    max: 2000,
+    max: 2500,
   },
   {
     title: "Sentences",
     id: "sentences",
     step: 1,
     min: 0,
-    max: 100,
+    max: 666,
   },
   {
     title: "Paragraphs",
     id: "paragraphs",
     step: 1,
     min: 0,
-    max: 100,
+    max: 333,
   },
 ];
 

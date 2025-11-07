@@ -50,7 +50,7 @@ export function SelectionPane( props: SelectionPaneProps ) {
         {localValue}
       </div>
       <SelectionSlider
-        orientation="vertical"
+        typeId={props.pane.id}
         value={[ localValue ]}
         min={min}
         max={max}
