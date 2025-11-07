@@ -6,8 +6,8 @@ import { ComponentProps, useMemo } from "react";
 
 
 export interface SelectionSliderProps extends ComponentProps<typeof SliderPrimitive.Root> {
-  defaultValue: number[];
-  value: number[];
+  defaultValue?: number[];
+  value?: number[];
   min: number;
   max: number;
   step: number;
@@ -15,14 +15,25 @@ export interface SelectionSliderProps extends ComponentProps<typeof SliderPrimit
 
 function SelectionSlider( props: SelectionSliderProps ) {
   const { className, defaultValue, value, min = 0, max = 100, step = 1, ...rest } = props;
+  const _values = useMemo(
+    () =>
+      Array.isArray( value )
+        ? value
+        : Array.isArray( defaultValue )
+          ? defaultValue
+          : [ min, max ],
+    [ value, defaultValue, min, max ]
+  );
+
+  // For controlled component, only pass value. For uncontrolled, only pass defaultValue.
+  const sliderProps = value !== undefined
+    ? { value, min, max, step }
+    : { defaultValue, min, max, step };
 
   return (
     <SliderPrimitive.Root
       data-slot="slider"
-      defaultValue={defaultValue}
-      value={value}
-      min={min}
-      max={max}
+      {...sliderProps}
       className={cn(
         "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:flex-col",
         className

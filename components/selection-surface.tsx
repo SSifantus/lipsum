@@ -1,31 +1,34 @@
+"use client";
+
+import { useState } from "react";
 import { SelectionPane } from "./selection-pane";
 
 
 const panes = [
   {
     title: "Characters",
-    value: "characters",
+    id: "characters",
     step: 1,
     min: 0,
     max: 5000,
   },
   {
     title: "Words",
-    value: "words",
+    id: "words",
     step: 1,
     min: 0,
     max: 2000,
   },
   {
     title: "Sentences",
-    value: "sentences",
+    id: "sentences",
     step: 1,
     min: 0,
     max: 100,
   },
   {
     title: "Paragraphs",
-    value: "paragraphs",
+    id: "paragraphs",
     step: 1,
     min: 0,
     max: 100,
@@ -33,12 +36,30 @@ const panes = [
 ];
 
 export function SelectionSurface() {
+  const [ values, setValues ] = useState<Record<string, number>>( () => {
+    const initial: Record<string, number> = {};
+    panes.forEach( ( pane ) => {
+      initial[ pane.id ] = pane.min;
+    } );
+    return initial;
+  } );
+
+  const handleChange = ( id: string, newValue: number ) => {
+    setValues( ( prev ) => ( {
+      ...prev,
+      [ id ]: newValue,
+    } ) );
+  };
+
   return (
     <div className="w-full h-full grid grid-cols-4 grid-rows-1 pb-20">
-      {panes.map((pane) => (
-        <SelectionPane key={pane.title} title={pane.title} value={pane.value} onChange={() => {
-        }}/>
-      ))}
+      {panes.map( ( pane ) => (
+        <SelectionPane
+          key={pane.id}
+          pane={{ ...pane, value: values[ pane.id ] }}
+          onChange={( value ) => handleChange( pane.id, value )}
+        />
+      ) )}
     </div>
   );
 }
