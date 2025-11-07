@@ -170,3 +170,8 @@
   animation: none;
   mix-blend-mode: normal;
 }
+
+/* Target the parent span of Radix Slider Thumb */
+[data-slot="slider"]>span:has([data-slot="slider-thumb"]) {
+  width: 100%;
+}
