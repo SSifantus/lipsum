@@ -5,6 +5,7 @@ import { useCallback, useRef, useState } from "react";
 
 export interface SelectionSliderProps {
   className?: string;
+  title?: string;
   value?: number[];
   min: number;
   max: number;
@@ -52,7 +53,7 @@ function pixelConversion( n: number ): number {
 }
 
 function SelectionSlider( props: SelectionSliderProps ) {
-  const { className, value = [ 0 ], min = 0, max = 100, typeId, onValueChange, onValueCommit } = props;
+  const { className, value = [ 0 ], min = 0, max = 100, title, typeId, onValueChange, onValueCommit } = props;
   const [ hoverValue, setHoverValue ] = useState<number | null>( null );
   const [ cursorY, setCursorY ] = useState<number | null>( null );
   const [ trackHeight, setTrackHeight ] = useState<number>( 0 );
@@ -165,35 +166,20 @@ function SelectionSlider( props: SelectionSliderProps ) {
     }
   }, [ hoverValue, onValueCommit, onValueChange, min ] );
 
-  const displayValue = hoverValue !== null ? hoverValue : ( value.length > 0 ? value[ 0 ] : min );
+  const valueDisplay = hoverValue !== null ? hoverValue : ( value.length > 0 ? value[ 0 ] : min );
 
-  // Calculate fill height based on cursor position, not value
-  const fillHeight = cursorY !== null && trackHeight > 0
-    ? `${( cursorY / trackHeight ) * 100}%`
-    : value.length > 0
-      ? `${( value[ 0 ] / max ) * 100}%`
-      : "0%";
+  const titleDisplay = valueDisplay === 1 ? title : `${title}s`;
+
+  const fillHeight = cursorY !== null && trackHeight > 0 ? `${( cursorY / trackHeight ) * 100}%` : "0%";
 
   return (
-    <div
-      ref={sliderRef}
-      data-slot="slider"
-      className={cn(
-        "relative flex w-full h-full min-h-44 flex-col touch-none select-none",
-        className
-      )}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
-    >
-      {/* Track */}
+    <div ref={sliderRef} data-slot="slider" className={cn( "relative flex w-full h-full min-h-44 flex-col touch-none select-none", className )} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} onClick={handleClick}>
       <div
         data-slot="slider-track"
         className={cn(
           "bg-muted relative grow w-full overflow-hidden"
         )}
       >
-        {/* Range - fills from top to cursor position */}
         <div
           data-slot="slider-range"
           className={cn(
@@ -207,8 +193,7 @@ function SelectionSlider( props: SelectionSliderProps ) {
         />
       </div>
 
-      {/* Number holder - shows value on hover, follows cursor */}
-      {cursorY !== null && (
+      {cursorY !== null ? (
         <div
           className="absolute w-full pointer-events-none border-t border-primary"
           style={{
@@ -219,10 +204,10 @@ function SelectionSlider( props: SelectionSliderProps ) {
           }}
         >
           <div className="text-lg font-medium whitespace-nowrap text-center">
-            {displayValue}
+            {valueDisplay} {titleDisplay}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

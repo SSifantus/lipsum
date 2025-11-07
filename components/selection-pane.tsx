@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
 import { SelectionSlider } from "@/components";
+import { useCallback, useEffect, useState } from "react";
 
 export interface SinglePane {
   title: string;
@@ -14,34 +14,34 @@ export interface SinglePane {
 
 export interface SelectionPaneProps {
   pane: SinglePane;
-  onChange?: ( value: number ) => void;
+  onChange?: (value: number) => void;
 }
 
-export function SelectionPane( props: SelectionPaneProps ) {
-  const { title, value = 0, step, min, max } = props.pane;
-  const { onChange } = props;
+export function SelectionPane(props: SelectionPaneProps) {
+  const {title, value = 0, step, min, max} = props.pane;
+  const {onChange} = props;
 
   // Local state for smooth dragging
-  const [ localValue, setLocalValue ] = useState( value );
+  const [localValue, setLocalValue] = useState(value);
 
   // Sync local state when prop value changes (from external updates)
-  useEffect( () => {
-    setLocalValue( value );
-  }, [ value ] );
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
 
   // Update local state immediately for smooth dragging
-  const handleValueChange = useCallback( ( newValue: number[] ) => {
-    if ( newValue.length > 0 ) {
-      setLocalValue( newValue[ 0 ] );
+  const handleValueChange = useCallback((newValue: number[]) => {
+    if (newValue.length > 0) {
+      setLocalValue(newValue[0]);
     }
-  }, [] );
+  }, []);
 
   // Update parent state when drag ends
-  const handleValueCommit = useCallback( ( newValue: number[] ) => {
-    if ( onChange && newValue.length > 0 ) {
-      onChange( newValue[ 0 ] );
+  const handleValueCommit = useCallback((newValue: number[]) => {
+    if (onChange && newValue.length > 0) {
+      onChange(newValue[0]);
     }
-  }, [ onChange ] );
+  }, [onChange]);
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -51,7 +51,8 @@ export function SelectionPane( props: SelectionPaneProps ) {
       </div>
       <SelectionSlider
         typeId={props.pane.id}
-        value={[ localValue ]}
+        title={title}
+        value={[localValue]}
         min={min}
         max={max}
         step={step}

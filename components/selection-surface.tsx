@@ -6,32 +6,32 @@ import { SelectionPane } from "./selection-pane";
 
 const panes = [
   {
-    title: "Characters",
+    title: "Character",
     id: "characters",
     step: 1,
     min: 0,
     max: 5000,
   },
   {
-    title: "Words",
+    title: "Word",
     id: "words",
     step: 1,
     min: 0,
-    max: 2500,
+    max: 1000,
   },
   {
-    title: "Sentences",
+    title: "Sentence",
     id: "sentences",
     step: 1,
     min: 0,
-    max: 666,
+    max: 250,
   },
   {
-    title: "Paragraphs",
+    title: "Paragraph",
     id: "paragraphs",
     step: 1,
     min: 0,
-    max: 333,
+    max: 100,
   },
 ];
 
