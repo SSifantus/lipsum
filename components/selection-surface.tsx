@@ -36,30 +36,31 @@ const panes = [
 ];
 
 export function SelectionSurface() {
-  const [ values, setValues ] = useState<Record<string, number>>( () => {
+  const [values, setValues] = useState<Record<string, number>>(() => {
     const initial: Record<string, number> = {};
-    panes.forEach( ( pane ) => {
-      initial[ pane.id ] = pane.min;
-    } );
+    panes.forEach((pane) => {
+      initial[pane.id] = pane.min;
+    });
     return initial;
-  } );
+  });
 
-  const handleChange = ( id: string, newValue: number ) => {
-    setValues( ( prev ) => ( {
+  const handleChange = (id: string, newValue: number) => {
+    setValues((prev) => ({
       ...prev,
-      [ id ]: newValue,
-    } ) );
+      [id]: newValue,
+    }));
   };
 
   return (
     <div className="w-full h-full grid grid-cols-4 grid-rows-1 pb-20">
-      {panes.map( ( pane ) => (
+      {panes.map((pane, index) => (
         <SelectionPane
+          index={index}
           key={pane.id}
-          pane={{ ...pane, value: values[ pane.id ] }}
-          onChange={( value ) => handleChange( pane.id, value )}
+          pane={{...pane, value: values[pane.id]}}
+          onChange={(value) => handleChange(pane.id, value)}
         />
-      ) )}
+      ))}
     </div>
   );
 }

@@ -13,13 +13,14 @@ export interface SinglePane {
 }
 
 export interface SelectionPaneProps {
+  index: number;
   pane: SinglePane;
   onChange?: (value: number) => void;
 }
 
 export function SelectionPane(props: SelectionPaneProps) {
-  const {title, value = 0, step, min, max} = props.pane;
-  const {onChange} = props;
+  const {index, pane, onChange} = props;
+  const {title, value = 0, step, min, max} = pane;
 
   // Local state for smooth dragging
   const [localValue, setLocalValue] = useState(value);
@@ -50,6 +51,7 @@ export function SelectionPane(props: SelectionPaneProps) {
         {localValue}
       </div>
       <SelectionSlider
+        index={index}
         typeId={props.pane.id}
         title={title}
         value={[localValue]}
