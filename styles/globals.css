@@ -175,3 +175,13 @@
 [data-slot="slider"]>span:has([data-slot="slider-thumb"][data-orientation="vertical"]) {
   width: 100%;
 }
+
+/* Animate thumb position when entering from side */
+[data-slot="slider"][data-animating="true"]>span:has([data-slot="slider-thumb"]) {
+  transition: transform 0.3s ease-out !important;
+}
+
+/* Also target the span wrapper directly */
+[data-slot="slider"][data-animating="true"]>span[style*="transform"] {
+  transition: transform 0.3s ease-out !important;
+}

@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import * as SliderPrimitive from "@radix-ui/react-slider";
-import { ComponentProps, useMemo, useState, useEffect, useRef } from "react";
+import { ComponentProps, useMemo, useState, useEffect, useRef, useCallback } from "react";
 
 function SelectionSlider( {
   className,
@@ -26,16 +26,23 @@ function SelectionSlider( {
   );
 
   const [ internalValue, setInternalValue ] = useState<number[]>( defaultValues );
+  const [ isAnimating, setIsAnimating ] = useState( false );
   const trackRef = useRef<HTMLDivElement>( null );
   const snapBackTimeoutRef = useRef<NodeJS.Timeout | null>( null );
+  const isHoveringRef = useRef<boolean>( false );
+  const animationTimeoutRef = useRef<NodeJS.Timeout | null>( null );
   const isVertical = orientation === "vertical";
 
-  // Sync internal value when defaultValue changes
-  useEffect( () => {
+  // Sync internal value when defaultValue changes - use callback to avoid lint error
+  const syncDefaultValue = useCallback( () => {
     if ( !isControlled ) {
       setInternalValue( defaultValues );
     }
   }, [ defaultValues, isControlled ] );
+
+  useEffect( () => {
+    syncDefaultValue();
+  }, [ syncDefaultValue ] );
 
   const _values = useMemo(
     () =>
@@ -104,17 +111,65 @@ function SelectionSlider( {
     const newValueArray = [ newValue ];
 
     if ( !isControlled ) {
-      setInternalValue( newValueArray );
+      // If we're animating on initial entry, use smooth transition
+      if ( isAnimating ) {
+        setInternalValue( newValueArray );
+      } else {
+        // Normal hover behavior - immediate update
+        setInternalValue( newValueArray );
+      }
     }
     onValueChange?.( newValueArray );
   };
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = ( event: React.MouseEvent<HTMLDivElement> ) => {
     // Clear any pending snap back timeout when mouse re-enters
     clearSnapBackTimeout();
+
+    // Clear any existing animation timeout
+    if ( animationTimeoutRef.current ) {
+      clearTimeout( animationTimeoutRef.current );
+      animationTimeoutRef.current = null;
+    }
+
+    // Check if this is initial entry (mouse was not hovering before)
+    if ( !isHoveringRef.current ) {
+      // Calculate target value from entry position
+      const targetValue = calculateValueFromPosition( event.clientX, event.clientY );
+      const targetValueArray = [ targetValue ];
+
+      // Enable animation for smooth transition
+      setIsAnimating( true );
+
+      // Use requestAnimationFrame to ensure smooth animation start
+      requestAnimationFrame( () => {
+        // Set the target value
+        if ( !isControlled ) {
+          setInternalValue( targetValueArray );
+        }
+        onValueChange?.( targetValueArray );
+
+        // Disable animation after transition completes
+        animationTimeoutRef.current = setTimeout( () => {
+          setIsAnimating( false );
+          animationTimeoutRef.current = null;
+        }, 300 ); // Match animation duration
+      } );
+    }
+
+    isHoveringRef.current = true;
   };
 
   const handleMouseLeave = () => {
+    isHoveringRef.current = false;
+    setIsAnimating( false );
+
+    // Clear animation timeout
+    if ( animationTimeoutRef.current ) {
+      clearTimeout( animationTimeoutRef.current );
+      animationTimeoutRef.current = null;
+    }
+
     // Schedule snap back with delay
     scheduleSnapBack();
   };
@@ -135,10 +190,13 @@ function SelectionSlider( {
     snapBackToDefault();
   };
 
-  // Cleanup timeout on unmount
+  // Cleanup timeouts on unmount
   useEffect( () => {
     return () => {
       clearSnapBackTimeout();
+      if ( animationTimeoutRef.current ) {
+        clearTimeout( animationTimeoutRef.current );
+      }
     };
   }, [] );
 
@@ -155,6 +213,7 @@ function SelectionSlider( {
   return (
     <SliderPrimitive.Root
       data-slot="slider"
+      data-animating={isAnimating}
       defaultValue={defaultValue}
       value={isControlled ? value : internalValue}
       min={min}
