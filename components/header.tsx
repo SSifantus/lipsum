@@ -1,0 +1,18 @@
+import { Logo } from "@/components/logo";
+import { SourceSelector } from "@/components/source-selector";
+import { ThemeToggler } from "@/components/theme-toggler";
+
+export function Header() {
+  return (
+    <header
+      className="fixed left-0 top-0 z-50 w-full px-4 animate-fade-in border-b backdrop-blur-[12px] [--animation-delay:600ms]">
+      <div className="flex h-[var(--navigation-height)] w-full items-center justify-between">
+        <Logo/>
+        <div className="flex gap-4">
+          <SourceSelector/>
+          <ThemeToggler/>
+        </div>
+      </div>
+    </header>
+  );
+}
