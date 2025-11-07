@@ -3,7 +3,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 export function SourceSelector() {
   return (
     <Select>
-      <SelectTrigger className="w-45">
+      <SelectTrigger size="sm" className="w-45">
         <SelectValue placeholder="Select a generator"/>
       </SelectTrigger>
       <SelectContent>

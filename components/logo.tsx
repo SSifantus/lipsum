@@ -3,17 +3,8 @@
 import { useEffect, useState } from "react";
 
 export function Logo() {
-  // Initialize state from localStorage if available, otherwise check document
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== "undefined") {
-      const storedTheme = localStorage.getItem("theme");
-      if (storedTheme) {
-        return storedTheme === "dark";
-      }
-      return document.documentElement.classList.contains("dark");
-    }
-    return false;
-  });
+  // Initialize with false to match server render, then update in useEffect
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const updateTheme = () => {
@@ -22,7 +13,7 @@ export function Logo() {
       setIsDark(shouldBeDark);
     };
 
-    // Read from localStorage on mount
+    // Read from localStorage on mount (client-side only)
     updateTheme();
 
     // Listen for storage events (cross-tab updates)

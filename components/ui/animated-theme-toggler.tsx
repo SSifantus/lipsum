@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Moon, Sun } from "lucide-react";
+import { CloudMoon, CloudSun } from "lucide-react";
 import { ComponentPropsWithoutRef, useCallback, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 
@@ -10,63 +10,63 @@ interface AnimatedThemeTogglerProps
   duration?: number;
 }
 
-export const AnimatedThemeToggler = ( {
-  className,
-  duration = 400,
-  ...props
-}: AnimatedThemeTogglerProps ) => {
-  const [ isDark, setIsDark ] = useState( false );
-  const buttonRef = useRef<HTMLButtonElement>( null );
+export const AnimatedThemeToggler = ({
+                                       className,
+                                       duration = 400,
+                                       ...props
+                                     }: AnimatedThemeTogglerProps) => {
+  const [isDark, setIsDark] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect( () => {
+  useEffect(() => {
     // Read from localStorage first
-    const storedTheme = localStorage.getItem( "theme" );
+    const storedTheme = localStorage.getItem("theme");
     const prefersDark = storedTheme === "dark";
 
-    if ( prefersDark !== document.documentElement.classList.contains( "dark" ) ) {
-      if ( prefersDark ) {
-        document.documentElement.classList.add( "dark" );
+    if (prefersDark !== document.documentElement.classList.contains("dark")) {
+      if (prefersDark) {
+        document.documentElement.classList.add("dark");
       } else {
-        document.documentElement.classList.remove( "dark" );
+        document.documentElement.classList.remove("dark");
       }
     }
 
     const updateTheme = () => {
-      setIsDark( document.documentElement.classList.contains( "dark" ) );
+      setIsDark(document.documentElement.classList.contains("dark"));
     };
 
     updateTheme();
 
-    const observer = new MutationObserver( updateTheme );
-    observer.observe( document.documentElement, {
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: [ "class" ],
-    } );
+      attributeFilter: ["class"],
+    });
 
     return () => observer.disconnect();
-  }, [] );
+  }, []);
 
-  const toggleTheme = useCallback( async () => {
-    if ( !buttonRef.current ) return;
+  const toggleTheme = useCallback(async () => {
+    if (!buttonRef.current) return;
 
-    await document.startViewTransition( () => {
-      flushSync( () => {
+    await document.startViewTransition(() => {
+      flushSync(() => {
         const newTheme = !isDark;
-        setIsDark( newTheme );
-        document.documentElement.classList.toggle( "dark" );
-        localStorage.setItem( "theme", newTheme ? "dark" : "light" );
+        setIsDark(newTheme);
+        document.documentElement.classList.toggle("dark");
+        localStorage.setItem("theme", newTheme ? "dark" : "light");
         // Dispatch custom event for same-tab updates
-        window.dispatchEvent( new Event( "themechange" ) );
-      } );
-    } ).ready;
+        window.dispatchEvent(new Event("themechange"));
+      });
+    }).ready;
 
-    const { top, left, width, height } =
+    const {top, left, width, height} =
       buttonRef.current.getBoundingClientRect();
     const x = left + width / 2;
     const y = top + height / 2;
     const maxRadius = Math.hypot(
-      Math.max( left, window.innerWidth - left ),
-      Math.max( top, window.innerHeight - top )
+      Math.max(left, window.innerWidth - left),
+      Math.max(top, window.innerHeight - top)
     );
 
     document.documentElement.animate(
@@ -82,16 +82,16 @@ export const AnimatedThemeToggler = ( {
         pseudoElement: "::view-transition-new(root)",
       }
     );
-  }, [ isDark, duration ] );
+  }, [isDark, duration]);
 
   return (
     <button
       ref={buttonRef}
       onClick={toggleTheme}
-      className={cn( className )}
+      className={cn(className)}
       {...props}
     >
-      {isDark ? <Sun /> : <Moon />}
+      {isDark ? <CloudMoon className="size-4"/> : <CloudSun className="size-4"/>}
       <span className="sr-only">Toggle theme</span>
     </button>
   );
