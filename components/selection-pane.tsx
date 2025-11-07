@@ -18,7 +18,7 @@ export interface SelectionPaneProps {
   onChange?: (value: number) => void;
 }
 
-export function SelectionPane(props: SelectionPaneProps) {
+export function SelectionPane(props: SelectionPaneProps){
   const {index, pane, onChange} = props;
   const {title, value = 0, step, min, max} = pane;
 
@@ -32,24 +32,21 @@ export function SelectionPane(props: SelectionPaneProps) {
 
   // Update local state immediately for smooth dragging
   const handleValueChange = useCallback((newValue: number[]) => {
-    if (newValue.length > 0) {
+    if(newValue.length > 0) {
       setLocalValue(newValue[0]);
     }
   }, []);
 
   // Update parent state when drag ends
   const handleValueCommit = useCallback((newValue: number[]) => {
-    if (onChange && newValue.length > 0) {
+    if(onChange && newValue.length > 0) {
       onChange(newValue[0]);
     }
   }, [onChange]);
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <h3 className="text-lg font-medium p-4">{title}</h3>
-      <div className="text-2xl font-bold mb-4 min-h-[2rem] flex items-center justify-center">
-        {localValue}
-      </div>
+      <h3 className="text-lg font-medium p-4">{title}s</h3>
       <SelectionSlider
         index={index}
         typeId={props.pane.id}
