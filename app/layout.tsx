@@ -1,4 +1,4 @@
-import { Header } from "@/components";
+import { Header, Toaster } from "@/components";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ReactNode } from "react";
@@ -29,6 +29,7 @@ export default function RootLayout({
     <body
       className={`min-h-screen bg-background font-sans antialiased ${geistSans.variable} ${geistMono.variable}`}
     >
+    <Toaster/>
     <Header/>
     {children}
     </body>
