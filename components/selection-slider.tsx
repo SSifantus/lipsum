@@ -139,16 +139,31 @@ function SelectionSlider( props: SelectionSliderProps ) {
   const handleMouseLeave = useCallback( () => {
     setHoverValue( null );
     setCursorY( null );
-  }, [] );
+    // Reset value to min (0) when leaving the column
+    if ( onValueCommit ) {
+      onValueCommit( [ min ] );
+    }
+    if ( onValueChange ) {
+      onValueChange( [ min ] );
+    }
+  }, [ onValueCommit, onValueChange, min ] );
 
   const handleClick = useCallback( () => {
+    // First commit the hover value
     if ( hoverValue !== null ) {
       alert( `Selected value: ${hoverValue}` );
       if ( onValueCommit ) {
         onValueCommit( [ hoverValue ] );
       }
     }
-  }, [ hoverValue, onValueCommit ] );
+    // Then reset value to min (0)
+    if ( onValueCommit ) {
+      onValueCommit( [ min ] );
+    }
+    if ( onValueChange ) {
+      onValueChange( [ min ] );
+    }
+  }, [ hoverValue, onValueCommit, onValueChange, min ] );
 
   const displayValue = hoverValue !== null ? hoverValue : ( value.length > 0 ? value[ 0 ] : min );
 
@@ -182,7 +197,8 @@ function SelectionSlider( props: SelectionSliderProps ) {
         <div
           data-slot="slider-range"
           className={cn(
-            "bg-primary absolute w-full transition-all duration-300"
+            "bg-primary absolute w-full",
+            cursorY === null && "transition-all duration-300"
           )}
           style={{
             height: fillHeight,
