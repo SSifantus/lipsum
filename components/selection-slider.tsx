@@ -27,6 +27,7 @@ function SelectionSlider( {
 
   const [ internalValue, setInternalValue ] = useState<number[]>( defaultValues );
   const trackRef = useRef<HTMLDivElement>( null );
+  const snapBackTimeoutRef = useRef<NodeJS.Timeout | null>( null );
   const isVertical = orientation === "vertical";
 
   // Sync internal value when defaultValue changes
@@ -71,7 +72,34 @@ function SelectionSlider( {
     return Math.round( calculatedValue / stepValue ) * stepValue;
   };
 
+  const snapBackToDefault = () => {
+    // Snap back to defaultValue (only for uncontrolled)
+    if ( !isControlled ) {
+      setInternalValue( defaultValues );
+    }
+    onValueCommit?.( defaultValues );
+  };
+
+  const clearSnapBackTimeout = () => {
+    if ( snapBackTimeoutRef.current ) {
+      clearTimeout( snapBackTimeoutRef.current );
+      snapBackTimeoutRef.current = null;
+    }
+  };
+
+  const scheduleSnapBack = () => {
+    clearSnapBackTimeout();
+    // Add a delay before snapping back to defaultValue
+    snapBackTimeoutRef.current = setTimeout( () => {
+      snapBackToDefault();
+      snapBackTimeoutRef.current = null;
+    }, 50 ); // 500ms delay to prevent premature snap-back
+  };
+
   const handleMouseMove = ( event: React.MouseEvent<HTMLDivElement> ) => {
+    // Clear any pending snap back timeout
+    clearSnapBackTimeout();
+
     const newValue = calculateValueFromPosition( event.clientX, event.clientY );
     const newValueArray = [ newValue ];
 
@@ -81,13 +109,38 @@ function SelectionSlider( {
     onValueChange?.( newValueArray );
   };
 
-  const handleMouseLeave = () => {
-    // Snap back to defaultValue when mouse leaves (only for uncontrolled)
-    if ( !isControlled ) {
-      setInternalValue( defaultValues );
-    }
-    onValueCommit?.( defaultValues );
+  const handleMouseEnter = () => {
+    // Clear any pending snap back timeout when mouse re-enters
+    clearSnapBackTimeout();
   };
+
+  const handleMouseLeave = () => {
+    // Schedule snap back with delay
+    scheduleSnapBack();
+  };
+
+  const handleThumbClick = ( event: React.MouseEvent<HTMLSpanElement> ) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    // Clear any pending snap back timeout
+    clearSnapBackTimeout();
+
+    // Trigger onClick callback if provided
+    if ( props.onClick ) {
+      ( props.onClick as ( event: React.MouseEvent<HTMLSpanElement> ) => void )( event );
+    }
+
+    // Immediately snap back to defaultValue
+    snapBackToDefault();
+  };
+
+  // Cleanup timeout on unmount
+  useEffect( () => {
+    return () => {
+      clearSnapBackTimeout();
+    };
+  }, [] );
 
   const handleValueChange = () => {
     // Prevent Radix UI's default click/drag behavior - do nothing
@@ -121,7 +174,9 @@ function SelectionSlider( {
         ref={trackRef}
         data-slot="slider-track"
         onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onMouseDown={( e ) => e.preventDefault()}
         className={cn(
           "bg-muted relative grow overflow-hidden data-[orientation=horizontal]:h-1.5" +
           " data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-full cursor-pointer"
@@ -139,7 +194,11 @@ function SelectionSlider( {
         <SliderPrimitive.Thumb
           data-slot="slider-thumb"
           key={index}
-          className="border-primary ring-ring/50 block data-[orientation=horizontal]:w-4 data-[orientation=vertical]:w-full data-[orientation=vertical]:h-6 shrink-0 border bg-white shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 pointer-events-none"
+          onClick={handleThumbClick}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="border-primary ring-ring/50 block data-[orientation=horizontal]:w-4 data-[orientation=vertical]:w-full data-[orientation=vertical]:h-6 shrink-0 border bg-white shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
+          style={{ pointerEvents: "auto" }}
         />
       ) )}
     </SliderPrimitive.Root>
