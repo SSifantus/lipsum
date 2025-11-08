@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export function Logo() {
-  // Initialize with false to match server render, then update in useEffect
+export function Logo(){
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -13,17 +12,14 @@ export function Logo() {
       setIsDark(shouldBeDark);
     };
 
-    // Read from localStorage on mount (client-side only)
     updateTheme();
 
-    // Listen for storage events (cross-tab updates)
     const handleStorageChange = (ev: StorageEvent) => {
-      if (ev.key === "theme") {
+      if(ev.key === "theme") {
         updateTheme();
       }
     };
 
-    // Listen for custom theme change events (same-tab updates)
     const handleThemeChange = () => {
       updateTheme();
     };
