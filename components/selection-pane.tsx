@@ -46,7 +46,7 @@ export function SelectionPane(props: SelectionPaneProps){
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <h3 className="text-sm font-medium p-4">{title}s</h3>
+      <h3 className="text-sm font-bold p-4 w-full">{title}s</h3>
       <SelectionSlider
         index={index}
         typeId={props.pane.id}

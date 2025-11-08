@@ -1,4 +1,4 @@
-import { Header, Toaster } from "@/components";
+import { Footer, Header, Toaster } from "@/components";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ReactNode } from "react";
@@ -23,7 +23,7 @@ export default function RootLayout({
                                      children,
                                    }: Readonly<{
   children: ReactNode;
-}>) {
+}>){
   return (
     <html lang="en" className="dark">
     <body
@@ -32,6 +32,7 @@ export default function RootLayout({
     <Toaster/>
     <Header/>
     {children}
+    <Footer/>
     </body>
     </html>
   );
