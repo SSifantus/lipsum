@@ -1,8 +1,14 @@
 "use client";
 
+import { cn } from "@/lib";
 import { useEffect, useState } from "react";
 
-export function Logo(){
+type LogoProps = {
+  className?: string;
+}
+
+export function Logo(props: LogoProps){
+  const {className} = props;
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -35,7 +41,8 @@ export function Logo(){
 
   return (
     <h1
-      className={`bg-gradient-to-br ${isDark ? "from-white to-white/40" : "from-black to-black/40"} from-30% bg-clip-text leading-none text-transparent text-balance`}>Lipsum
-      Pro</h1>
+      className={cn(`bg-gradient-to-br ${isDark ? "from-white to-white/40" : "from-black to-black/40"} from-30% bg-clip-text leading-none text-transparent text-balance`, className)}>Lorem
+      Ipsum
+      Generator</h1>
   );
 }

@@ -5,7 +5,7 @@ export function Footer(){
     <footer
       className="w-full px-4 backdrop-blur-[12px] [--animation-delay:600ms]">
       <div className="flex h-[var(--navigation-height)] w-full items-center justify-between">
-        <Logo/>
+        <Logo className="text-sm"/>
         <div className="flex gap-3.5">
           <ul>
             <li>About</li>
