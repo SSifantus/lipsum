@@ -1,6 +1,8 @@
-import corporateData from "@/data/corporate.json";
+import legalData from "@/data/legal.json";
 import loremIpsumData from "@/data/lorem-ipsum.json";
+import pirateData from "@/data/pirate.json";
 import saganData from "@/data/sagan.json";
+import shakespeareData from "@/data/shakespeare.json";
 
 export interface SourceData {
   id: string;
@@ -14,21 +16,23 @@ export interface SourceData {
  */
 export const sources: SourceData[] = [
   loremIpsumData,
-  corporateData,
+  legalData,
+  pirateData,
   saganData,
+  shakespeareData,
 ];
 
 /**
  * Get a source by its ID
  */
-export function getSourceById(id: string): SourceData | undefined {
-  return sources.find(source => source.id === id);
+export function getSourceById( id: string ): SourceData | undefined {
+  return sources.find( source => source.id === id );
 }
 
 /**
  * Get all source IDs
  */
 export function getAllSourceIds(): string[] {
-  return sources.map(source => source.id);
+  return sources.map( source => source.id );
 }
 
