@@ -3,6 +3,7 @@ import loremIpsumData from "@/data/lorem-ipsum.json";
 import pirateData from "@/data/pirate.json";
 import saganData from "@/data/sagan.json";
 import shakespeareData from "@/data/shakespeare.json";
+import whitmanData from "@/data/whitman.json";
 
 export interface SourceData {
   id: string;
@@ -20,19 +21,12 @@ export const sources: SourceData[] = [
   pirateData,
   saganData,
   shakespeareData,
+  whitmanData,
 ];
 
 /**
  * Get a source by its ID
  */
-export function getSourceById( id: string ): SourceData | undefined {
-  return sources.find( source => source.id === id );
+export function getSourceById(id: string): SourceData | undefined{
+  return sources.find(source => source.id === id);
 }
-
-/**
- * Get all source IDs
- */
-export function getAllSourceIds(): string[] {
-  return sources.map( source => source.id );
-}
-
