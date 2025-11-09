@@ -1,14 +1,14 @@
-import { SourceType } from "@/types";
 import { create } from "zustand";
+import { sources } from "@/lib/utils/sources";
 
 interface SourceStore {
-  source: SourceType | null;
-  setSource: ( source: SourceType | null ) => void;
-  getSource: () => SourceType | null;
+  source: string | null;
+  setSource: ( source: string | null ) => void;
+  getSource: () => string | null;
 }
 
 export const useSourceStore = create<SourceStore>( ( set, get ) => ( {
-  source: SourceType.LOREM_IPSUM,
+  source: sources[ 0 ]?.id || null,
   setSource: ( source ) => set( { source } ),
   getSource: () => get().source,
 } ) );

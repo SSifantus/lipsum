@@ -1,22 +1,22 @@
 "use client";
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
+import { sources } from "@/lib/utils/sources";
 import { useSourceStore } from "@/stores/source";
-import { SourceType } from "@/types";
 
 export function SourceSelector() {
-
   const { setSource, source } = useSourceStore( ( state ) => state );
-
+  console.log( source );
   return (
-    <Select value={source || undefined} onValueChange={( value ) => setSource( value as SourceType )}>
+    <Select value={source || undefined} onValueChange={( value ) => setSource( value )}>
       <SelectTrigger size="sm" className="w-45">
         <SelectValue placeholder="Select a generator" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectItem value="lorem-ipsum">Lorem Ipsum</SelectItem>
-          <SelectItem value="corporate">Corporate</SelectItem>
+          {sources.map( ( sourceItem ) => (
+            <SelectItem key={sourceItem.id} value={sourceItem.id}>{sourceItem.title}</SelectItem>
+          ) )}
         </SelectGroup>
       </SelectContent>
     </Select>
