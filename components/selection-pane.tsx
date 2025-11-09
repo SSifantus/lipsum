@@ -22,22 +22,18 @@ export function SelectionPane(props: SelectionPaneProps){
   const {index, pane, onChange} = props;
   const {title, value = 0, step, min, max} = pane;
 
-  // Local state for smooth dragging
   const [localValue, setLocalValue] = useState(value);
 
-  // Sync local state when prop value changes (from external updates)
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
 
-  // Update local state immediately for smooth dragging
   const handleValueChange = useCallback((newValue: number[]) => {
     if(newValue.length > 0) {
       setLocalValue(newValue[0]);
     }
   }, []);
 
-  // Update parent state when drag ends
   const handleValueCommit = useCallback((newValue: number[]) => {
     if(onChange && newValue.length > 0) {
       onChange(newValue[0]);
