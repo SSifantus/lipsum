@@ -1,10 +1,17 @@
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
+"use client";
 
-export function SourceSelector() {
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
+import { useSourceStore } from "@/stores/source";
+import { SourceType } from "@/types";
+
+export function SourceSelector(){
+  const source = useSourceStore((state) => state.source);
+  const setSource = useSourceStore((state) => state.setSource);
+
   return (
-    <Select>
+    <Select value={source || undefined} onValueChange={(value) => setSource(value as SourceType)}>
       <SelectTrigger size="sm" className="w-45">
-        <SelectValue placeholder="Select a generator" />
+        <SelectValue placeholder="Select a generator"/>
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
