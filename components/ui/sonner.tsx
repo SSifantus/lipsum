@@ -2,15 +2,23 @@
 
 import { CircleCheckIcon, InfoIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon, } from "lucide-react";
 import { useTheme } from "next-themes";
-import { CSSProperties } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
 const Toaster = ({...props}: ToasterProps) => {
   const {theme = "system"} = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Default to light during SSR to prevent hydration mismatch
+  const resolvedTheme = mounted ? theme : "light";
 
   return (
     <Sonner
-      theme={theme as ToasterProps["theme"]}
+      theme={resolvedTheme as ToasterProps["theme"]}
       className="toaster group"
       icons={{
         success: <CircleCheckIcon className="size-4"/>,
