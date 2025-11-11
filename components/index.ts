@@ -1,6 +1,7 @@
 export * from "./header";
 export * from "./footer";
 export * from "./logo";
+export * from "./selection-column";
 export * from "./selection-pane";
 export * from "./selection-slider";
 export * from "./selection-surface";
