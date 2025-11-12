@@ -1,6 +1,6 @@
 "use client";
 
-import { SelectionColumn } from "@/components";
+import { SelectionColumn, SelectionSlider } from "@/components";
 import { useCallback, useEffect, useState } from "react";
 
 export interface SinglePane {
@@ -14,12 +14,13 @@ export interface SinglePane {
 
 export interface SelectionPaneProps {
   index: number;
+  isDesktop?: boolean;
   pane: SinglePane;
   onChange?: (value: number) => void;
 }
 
 export function SelectionPane(props: SelectionPaneProps){
-  const {index, pane, onChange} = props;
+  const {index, isDesktop = true, pane, onChange} = props;
   const {title, value = 0, step, min, max} = pane;
 
   const [localValue, setLocalValue] = useState(value);
@@ -27,6 +28,7 @@ export function SelectionPane(props: SelectionPaneProps){
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
+
 
   const handleValueChange = useCallback((newValue: number[]) => {
     if(newValue.length > 0) {
@@ -40,10 +42,28 @@ export function SelectionPane(props: SelectionPaneProps){
     }
   }, [onChange]);
 
+  if(isDesktop) {
+    return (
+      <div className="flex flex-col items-center justify-center">
+        <h3 className="text-sm font-bold p-4 w-full">{title}s</h3>
+        <SelectionColumn
+          index={index}
+          typeId={props.pane.id}
+          title={title}
+          value={[localValue]}
+          min={min}
+          max={max}
+          step={step}
+          onValueChange={handleValueChange}
+          onValueCommit={handleValueCommit}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center">
-      <h3 className="text-sm font-bold p-4 w-full">{title}s</h3>
-      <SelectionColumn
+    <div className="flex items-center justify-center">
+      <SelectionSlider
         index={index}
         typeId={props.pane.id}
         title={title}

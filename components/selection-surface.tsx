@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { isDesktopDevice } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import { SelectionPane } from "./selection-pane";
 
 
@@ -35,7 +36,10 @@ const panes = [
   },
 ];
 
-export function SelectionSurface() {
+export function SelectionSurface(){
+
+  const [isDesktop, setIsDesktop] = useState<boolean>(true);
+
   const [values, setValues] = useState<Record<string, number>>(() => {
     const initial: Record<string, number> = {};
     panes.forEach((pane) => {
@@ -51,11 +55,19 @@ export function SelectionSurface() {
     }));
   };
 
+
+  useEffect(() => {
+    if(typeof window !== "undefined" && navigator.userAgent) {
+      setIsDesktop(isDesktopDevice(navigator.userAgent));
+    }
+  }, []);
+
   return (
-    <div className="w-full h-full grid grid-cols-4 grid-rows-1 pb-20">
+    <div className={`w-full h-full pb-20 ${isDesktop ? "grid grid-cols-4 grid-rows-1" : "flex flex-col"}`}>
       {panes.map((pane, index) => (
         <SelectionPane
           index={index}
+          isDesktop={isDesktop}
           key={pane.id}
           pane={{...pane, value: values[pane.id]}}
           onChange={(value) => handleChange(pane.id, value)}
