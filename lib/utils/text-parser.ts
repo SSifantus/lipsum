@@ -62,7 +62,7 @@ function getRandomStartPosition(availableLength: number, neededLength: number): 
 
 /**
  * Cleans extracted text based on type:
- * - Characters and words: strip periods
+ * - Characters and words: strip all punctuation marks (periods, dashes, etc.)
  * - All except paragraphs: strip line breaks
  * - Characters: strip all spaces
  * - Words: strip double spaces (normalize to single spaces)
@@ -70,9 +70,10 @@ function getRandomStartPosition(availableLength: number, neededLength: number): 
 function cleanExtractedText(text: string, type: TextType): string{
   let cleaned = text;
 
-  // Strip periods from character and word results
+  // Strip all punctuation from character and word results
   if(type === "characters" || type === "words") {
-    cleaned = cleaned.replace(/\./g, "").toLowerCase();
+    // Remove all punctuation marks (everything that's not alphanumeric or whitespace)
+    cleaned = cleaned.replace(/[^\w\s]/g, "").toLowerCase();
   }
 
   // Strip line breaks from all except paragraphs
