@@ -62,7 +62,7 @@ export function SelectionPane(props: SelectionPaneProps){
   }
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center h-[22vh]">
       <SelectionSlider
         index={index}
         typeId={props.pane.id}
