@@ -1,3 +1,4 @@
+export * from "./confirmation-dialog";
 export * from "./header";
 export * from "./footer";
 export * from "./logo";

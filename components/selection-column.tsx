@@ -1,7 +1,7 @@
 "use client";
 
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from "@/components/ui/dialog";
+import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import { cn } from "@/lib/utils";
 import { extractAndCopyText } from "@/lib/utils/text-parser";
 import { useSourceStore } from "@/stores/source";
@@ -60,7 +60,7 @@ function SelectionColumn(props: SelectionColumnProps){
     let high = 10000;
     let result = 1;
 
-    while(low <= high) {
+    while (low <= high) {
       const mid = Math.floor((low + high) / 2);
       const converted = pixelConversion(mid);
 
@@ -170,6 +170,14 @@ function SelectionColumn(props: SelectionColumnProps){
     }
   }, [hoverValue, source, typeId, onValueCommit, onValueChange, min]);
 
+  const toggleDialog = (open: boolean) => { // TODO: DRY
+    setModalOpen(open);
+    if(!open) {
+      setCommittedValue(null);
+      setExtractedText("");
+    }
+  };
+
   const valueDisplay = hoverValue !== null ? hoverValue : (value.length > 0 ? value[0] : min);
 
   const titleDisplay = valueDisplay === 1 ? title : `${title}s`;
@@ -189,10 +197,10 @@ function SelectionColumn(props: SelectionColumnProps){
           className={cn(
             "relative grow w-full overflow-hidden",
             {
-              "[background:var(--slider-gradient-0)]": index === 0,
-              "[background:var(--slider-gradient-1)]": index === 1,
-              "[background:var(--slider-gradient-2)]": index === 2,
-              "[background:var(--slider-gradient-3)]": index === 3,
+              "[background:var(--slider-gradient-0)]":index === 0,
+              "[background:var(--slider-gradient-1)]":index === 1,
+              "[background:var(--slider-gradient-2)]":index === 2,
+              "[background:var(--slider-gradient-3)]":index === 3,
             },
           )}
         >
@@ -200,10 +208,10 @@ function SelectionColumn(props: SelectionColumnProps){
             data-slot="slider-range"
             className={cn(
               "bg-white/20 absolute w-full top-0",
-              {"transition-all duration-300": cursorY === null}
+              {"transition-all duration-300":cursorY === null}
             )}
             style={{
-              height: fillHeight,
+              height:fillHeight,
             }}
           />
         </div>
@@ -212,10 +220,10 @@ function SelectionColumn(props: SelectionColumnProps){
           <div
             className="absolute w-full pointer-events-none border-t border-white"
             style={{
-              top: `${cursorY}px`,
-              left: 0,
-              opacity: hoverValue !== null ? 1 : 0,
-              transition: "opacity 0.2s",
+              top:`${cursorY}px`,
+              left:0,
+              opacity:hoverValue !== null ? 1 : 0,
+              transition:"opacity 0.2s",
             }}
           >
             <div className="text-lg text-white font-medium whitespace-nowrap text-center hover:cursor-pointer">
@@ -224,27 +232,8 @@ function SelectionColumn(props: SelectionColumnProps){
           </div>
         ) : null}
       </div>
-      <Dialog open={modalOpen} onOpenChange={(open) => {
-        setModalOpen(open);
-        if(!open) {
-          setCommittedValue(null);
-          setExtractedText("");
-        }
-      }}>
-        <DialogContent className="w-115 max-w-[99vw] max-h-[60vh] overflow-hidden">
-          <DialogHeader>
-            <DialogTitle>{dialogTitleDisplay} Copied!</DialogTitle>
-            <DialogDescription>
-              {dialogValue} {dialogTitleDisplay} copied to clipboard
-            </DialogDescription>
-          </DialogHeader>
-          {extractedText ? (
-            <div className="p-4 bg-muted rounded-md max-h-[47vh] overflow-y-auto">
-              <p className="text-sm whitespace-pre-wrap break-words">{extractedText}</p>
-            </div>
-          ) : null}
-        </DialogContent>
-      </Dialog>
+      <ConfirmationDialog isOpen={modalOpen} onOpenChange={toggleDialog} text={extractedText} title={dialogTitleDisplay}
+                          value={dialogValue}/>
     </>
   );
 }
