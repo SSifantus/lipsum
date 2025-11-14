@@ -1,15 +1,20 @@
-import { Logo } from "@/components/logo";
+"use client";
 
-export function Footer(){
+import {
+  ContactForm,
+} from "@/components";
+
+export function Footer() {
   return (
     <footer
-      className="w-full px-4 backdrop-blur-[12px] [--animation-delay:600ms]">
+      className="w-full px-5 backdrop-blur-[12px] [--animation-delay:600ms]">
       <div className="flex h-[var(--navigation-height)] w-full items-center justify-between">
-        <Logo className="text-sm"/>
+        <div className="text-xs">A better Lorem Ipsum generator</div>
         <div className="flex gap-3.5">
-          <ul className="text-xs">
-            <li>About</li>
-          </ul>
+          <div className="flex gap-4 text-xs">
+            <div>About</div>
+            <ContactForm />
+          </div>
         </div>
       </div>
     </footer>

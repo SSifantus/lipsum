@@ -183,6 +183,11 @@
     @apply underline;
   }
 
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
   ul,
   ol {
     @apply list-inside;
