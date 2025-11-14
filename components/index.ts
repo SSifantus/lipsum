@@ -9,4 +9,5 @@ export * from "./selection-surface";
 export * from "./source-selector";
 export * from "./theme-provider";
 export * from "./theme-toggler";
+export * from "./title";
 export * from "./ui";

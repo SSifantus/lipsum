@@ -1,15 +1,16 @@
 "use client";
 
+import { HyperText } from "@/components/ui/hyper-text";
 import { cn } from "@/lib";
 import { useSourceStore } from "@/stores";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-type LogoProps = {
+type TitleProps = {
   className?: string;
 }
 
-export function Logo(props: LogoProps){
+export function Title(props: TitleProps){
   const {className} = props;
   const {source} = useSourceStore((state) => state);
   const {resolvedTheme} = useTheme();
@@ -25,8 +26,8 @@ export function Logo(props: LogoProps){
   const isDark = mounted && resolvedTheme === "dark";
 
   return (
-    <h1
+    <HyperText
       className={cn(`bg-gradient-to-br ${isDark ? "from-white to-white/40" : "from-black to-black/40"} from-30% bg-clip-text leading-none text-transparent text-balance`, className)}>
-      {label} Generator</h1>
+      Lipsum Fast</HyperText>
   );
 }
