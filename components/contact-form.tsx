@@ -9,13 +9,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   Input,
   Label,
   Textarea,
 } from "@/components";
-import { Formik } from "formik";
-import { useRef } from "react";
+import {Formik} from "formik";
+import {useRef} from "react";
+
 
 interface FormErrors {
   user_email?: string;
@@ -23,15 +23,18 @@ interface FormErrors {
   message?: string;
 }
 
-export function ContactForm(){
+interface ContactFormProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}
+
+export function ContactForm(props: ContactFormProps) {
+  const {open, setOpen} = props;
 
   const statusRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Open Dialog</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Contact Us</DialogTitle>
@@ -40,25 +43,25 @@ export function ContactForm(){
           </DialogDescription>
         </DialogHeader>
         <Formik
-          initialValues={{user_email:"", user_name:"", message:""}}
+          initialValues={{user_email: "", user_name: "", message: ""}}
           validate={values => {
             const errors: FormErrors = {};
-            if(!values.user_email) {
+            if (!values.user_email) {
               errors.user_email = "Required";
-            } else if(
+            } else if (
               !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.user_email)
             ) {
               errors.user_email = "Invalid email address";
             }
-            if(!values.user_name) {
+            if (!values.user_name) {
               errors.user_name = "Required";
             }
-            if(!values.message) {
+            if (!values.message) {
               errors.message = "Required";
             }
             return errors;
           }}
-          onSubmit={async(values, {setSubmitting, resetForm}) => {
+          onSubmit={async (values, {setSubmitting, resetForm}) => {
             try {
               const data = new FormData();
               data.append("name", values.user_name);
@@ -66,26 +69,26 @@ export function ContactForm(){
               data.append("message", values.message);
 
               const response = await fetch("https://formspree.io/f/xeovapel", {
-                method:"POST",
-                body:data,
-                headers:{
-                  "Accept":"application/json"
+                method: "POST",
+                body: data,
+                headers: {
+                  "Accept": "application/json"
                 }
               });
 
-              if(response.ok) {
-                if(statusRef.current) {
+              if (response.ok) {
+                if (statusRef.current) {
                   statusRef.current.innerHTML = "<span className='text-green-500'>Thank you for your message. Someone will get back to you shortly.</span>";
                   statusRef.current.style.display = "block";
                 }
                 resetForm();
               } else {
                 const errorData = await response.json();
-                if(statusRef.current) {
-                  if(Object.hasOwn(errorData, "errors")) {
-                    statusRef.current.innerHTML = errorData["errors"].map((error: {
+                if (statusRef.current) {
+                  if (Object.hasOwn(errorData, "errors")) {
+                    statusRef.current.innerHTML = errorData[ "errors" ].map((error: {
                       message: string
-                    }) => error["message"]).join(", ");
+                    }) => error[ "message" ]).join(", ");
                   } else {
                     statusRef.current.innerHTML = "<span>There was a problem sending the message. Please try again.</span>";
                   }
@@ -94,7 +97,7 @@ export function ContactForm(){
               }
             } catch (error) {
               console.error("Form submission error:", error);
-              if(statusRef.current) {
+              if (statusRef.current) {
                 statusRef.current.innerHTML = "<span>There was a problem sending the message. Please try again.</span>";
                 statusRef.current.style.display = "block";
               }
@@ -104,15 +107,15 @@ export function ContactForm(){
           }}
         >
           {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-              /* and other goodies */
-            }) => (
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+            /* and other goodies */
+          }) => (
             <form onSubmit={handleSubmit} className="grid gap-4">
 
               <div className="grid gap-3">
@@ -164,14 +167,14 @@ export function ContactForm(){
                   <Button variant="outline">Cancel</Button>
                 </DialogClose>
                 <Button type="submit"
-                        disabled={isSubmitting}>{isSubmitting ? "Sending..." : "Send Message"}</Button>
+                  disabled={isSubmitting}>{isSubmitting ? "Sending..." : "Send Message"}</Button>
 
 
               </DialogFooter>
               <div
                 ref={statusRef}
                 className="form-status alert-success text-xs text-right w-full"
-                style={{"display":"none"}}
+                style={{"display": "none"}}
               />
             </form>
           )}
