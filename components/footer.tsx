@@ -14,7 +14,7 @@ export function Footer(){
         <div className="text-xs">A better Lorem Ipsum generator</div>
         <div className="flex gap-3">
           <Button className="text-xs px-1" variant="link">About</Button>
-          <Button className="text-xs px-1" variant="link" onClick={() => setOpenContactForm(true)}>Contact Us</Button>
+          <Button className="text-xs px-1" variant="link" onClick={() => setOpenContactForm(true)}>Contact</Button>
           <ContactForm open={openContactForm} setOpen={setOpenContactForm}/>
         </div>
       </div>
