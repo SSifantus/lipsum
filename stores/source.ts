@@ -1,6 +1,6 @@
-import { getSourceById, sources } from "@/lib/utils/sources";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { getSourceById, sources } from "@/lib/utils/sources";
 
 interface SourceInfo {
   id: string;

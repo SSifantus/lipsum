@@ -1,7 +1,7 @@
-import { Footer, Header, ThemeProvider, Toaster } from "@/components";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { Footer, Header, ThemeProvider, Toaster } from "@/components";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {

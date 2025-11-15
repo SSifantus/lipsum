@@ -1,8 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Title } from "@/components/title";
 import { isDesktopDevice } from "@/lib/utils";
-import { useEffect, useState } from "react";
 import { SelectionPane } from "./selection-pane";
 
 

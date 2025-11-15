@@ -1,7 +1,7 @@
 "use client";
 
-import { SelectionColumn, SelectionSlider } from "@/components";
 import { useCallback, useEffect, useState } from "react";
+import { SelectionColumn, SelectionSlider } from "@/components";
 
 export interface SinglePane {
   title: string;

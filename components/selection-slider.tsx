@@ -1,11 +1,11 @@
 "use client";
 
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { extractAndCopyText } from "@/lib/utils/text-parser";
 import { useSourceStore } from "@/stores/source";
-import { useCallback, useEffect, useMemo, useState } from "react";
 
 export interface SelectionSliderProps {
   className?: string;

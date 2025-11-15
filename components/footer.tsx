@@ -1,7 +1,7 @@
 "use client";
 
-import { Button, ContactForm, } from "@/components";
 import { useState } from "react";
+import { Button, ContactForm, } from "@/components";
 
 export function Footer(){
 

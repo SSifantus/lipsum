@@ -1,10 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 import { HyperText } from "@/components/ui/hyper-text";
 import { cn } from "@/lib";
 import { useSourceStore } from "@/stores";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 type TitleProps = {
   className?: string;

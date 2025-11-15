@@ -1,10 +1,10 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { CloudMoon, CloudSun } from "lucide-react";
-import { useTheme } from "next-themes";
 import { ComponentPropsWithoutRef, useCallback, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
+import { CloudMoon, CloudSun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
 
 interface AnimatedThemeTogglerProps
   extends ComponentPropsWithoutRef<"button"> {
