@@ -4,15 +4,15 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } 
 import { cn } from "@/lib";
 
 export interface ConfirmationDialogProps {
-  className?:string;
-  isOpen:boolean;
-  onOpenChange:(open:boolean) => void;
-  text?:string;
-  title?:string;
-  value?:number | null;
+  className?: string;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  text?: string;
+  title?: string;
+  value?: number | null;
 }
 
-export const ConfirmationDialog = (props:ConfirmationDialogProps) => {
+export const ConfirmationDialog = (props: ConfirmationDialogProps) => {
   const {className, isOpen, onOpenChange, text = "", title = "", value = 0} = props;
 
   return (

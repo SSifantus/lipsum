@@ -1,3 +1,4 @@
+export * from "./about-modal";
 export * from "./confirmation-dialog";
 export * from "./contact-form";
 export * from "./header";
