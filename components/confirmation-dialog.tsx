@@ -19,7 +19,7 @@ export const ConfirmationDialog = (props: ConfirmationDialogProps) => {
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className={cn("w-115 max-w-[99vw] max-h-[60vh] overflow-hidden", className)}>
         <DialogHeader>
-          <DialogTitle>{title} Copied!</DialogTitle>
+          <DialogTitle>{title} Copied</DialogTitle>
           <DialogDescription>
             {value} {title} copied to clipboard
           </DialogDescription>

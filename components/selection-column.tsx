@@ -1,10 +1,10 @@
 "use client";
 
 
-import { useCallback, useRef, useState } from "react";
+import { MouseEvent, useCallback, useRef, useState } from "react";
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import { cn } from "@/lib/utils";
-import { extractAndCopyText } from "@/lib/utils/text-parser";
+import { calculateMaxPosition, extractAndCopyText, positionToClampedValue } from "@/lib/utils";
 import { useSourceStore } from "@/stores/source";
 
 export interface SelectionColumnProps {
@@ -15,30 +15,9 @@ export interface SelectionColumnProps {
   min: number;
   max: number;
   step: number;
-  typeId: string; // "characters" | "words" | "sentences" | "paragraphs"
+  typeId: "characters" | "words" | "sentences" | "paragraphs";
   onValueChange?: (value: number[]) => void;
   onValueCommit?: (value: number[]) => void;
-}
-
-// Convert pixels into values depending on how high the number is (curved calculation)
-function pixelConversion(n: number): number{
-  if(n < 1) return 1;
-
-  if(n >= 1 && n <= 100) {
-    return n;
-  } else if(n > 100 && n <= 300) {
-    return 100 + 5 * (n - 100);
-  } else if(n > 300 && n <= 500) {
-    return 100 + 5 * (300 - 100) + 10 * (n - 300);
-  } else if(n > 500 && n <= 1000) {
-    return 100 + 5 * (300 - 100) + 10 * (500 - 300) + 50 * (n - 500);
-  } else if(n > 1000 && n <= 2000) {
-    return 100 + 5 * (300 - 100) + 10 * (500 - 300) + 50 * (1000 - 500) + 100 * (n - 1000);
-  } else if(n > 2000) {
-    return 100 + 5 * (300 - 100) + 10 * (500 - 300) + 50 * (1000 - 500) + 100 * (2000 - 1000) + 500 * (n - 2000);
-  }
-
-  return n;
 }
 
 function SelectionColumn(props: SelectionColumnProps){
@@ -53,33 +32,15 @@ function SelectionColumn(props: SelectionColumnProps){
   const source = useSourceStore((state) => state.source);
 
   // Calculate what the maximum yValue should be to reach the max after pixelConversion
-  // Uses binary search to find the inverse of pixelConversion
   const calculateMaxYValue = useCallback((targetMax: number): number => {
-    // Binary search to find yValue such that pixelConversion(yValue) >= targetMax
-    let low = 1;
-    let high = 10000;
-    let result = 1;
-
-    while (low <= high) {
-      const mid = Math.floor((low + high) / 2);
-      const converted = pixelConversion(mid);
-
-      if(converted >= targetMax) {
-        result = mid;
-        high = mid - 1;
-      } else {
-        low = mid + 1;
-      }
-    }
-
-    return result;
+    return calculateMaxPosition(targetMax);
   }, []);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = useCallback((event: MouseEvent<HTMLDivElement>) => {
     if(!sliderRef.current) return;
 
     const rect = sliderRef.current.getBoundingClientRect();
-    const relativeY = e.clientY - rect.top;
+    const relativeY = event.clientY - rect.top;
     const height = rect.height;
 
     // Store track height for fill calculation
@@ -103,24 +64,7 @@ function SelectionColumn(props: SelectionColumnProps){
       yValue = 1;
     }
 
-    const convertedValue = pixelConversion(yValue);
-
-    // Clamp to max based on type
-    let finalValue = convertedValue;
-    if(typeId === "characters" && finalValue > 5000) {
-      finalValue = 5000;
-    } else if(typeId === "words" && finalValue > 2500) {
-      finalValue = 2500;
-    } else if(typeId === "sentences" && finalValue > 666) {
-      finalValue = 666;
-    } else if(typeId === "paragraphs" && finalValue > 333) {
-      finalValue = 333;
-    }
-
-    // Also clamp to the prop max
-    if(finalValue > max) {
-      finalValue = max;
-    }
+    const finalValue = positionToClampedValue(yValue, typeId, max, min);
 
     setHoverValue(finalValue);
     setCursorY(clampedY);
@@ -190,6 +134,8 @@ function SelectionColumn(props: SelectionColumnProps){
   return (
     <>
       <div ref={sliderRef} data-slot="slider"
+           data-text-type={typeId}
+           data-text-amount={hoverValue !== null ? hoverValue : (value.length > 0 ? value[0] : min)}
            className={cn("relative flex w-full h-full min-h-44 flex-col touch-none select-none ", className)}
            onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} onClick={handleClick}>
         <div

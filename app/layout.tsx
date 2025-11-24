@@ -5,9 +5,29 @@ import { Footer, Header, ThemeProvider, Toaster } from "@/components";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "Lipsum Pro",
-  description: "Lorem Ipsum generator",
-};
+  title:  "Lipsum Fast",
+  description: "A Lorem Ipsum generator",
+  metadataBase: new URL("https://lipsum.fast"),
+  icons: {
+    icon: '/favicon.png',
+  },
+  openGraph: {
+    title: "Lipsum Fast",
+    description: "A Lorem Ipsum generator",
+    url: "https://lipsum.fast",
+    siteName: "Lipsum Fast",
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: "Lipsum Fast",
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+}
 
 export default function RootLayout({
                                      children,
@@ -26,7 +46,7 @@ export default function RootLayout({
       <Footer/>
     </ThemeProvider>
     </body>
-    <GoogleAnalytics gaId="G-"/>
+    <GoogleAnalytics gaId="G-7QY7WTV5N8"/>
     </html>
   );
 }

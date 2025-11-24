@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
-import { extractAndCopyText } from "@/lib/utils/text-parser";
+import { calculateMaxPosition, extractAndCopyText, positionToClampedValue, valueToPosition } from "@/lib/utils";
 import { useSourceStore } from "@/stores/source";
 
 export interface SelectionSliderProps {
@@ -15,30 +15,9 @@ export interface SelectionSliderProps {
   min: number;
   max: number;
   step: number;
-  typeId: string; // "characters" | "words" | "sentences" | "paragraphs"
+  typeId: "characters" | "words" | "sentences" | "paragraphs";
   onValueChange?: (value: number[]) => void;
   onValueCommit?: (value: number[]) => void;
-}
-
-// Convert slider position into values depending on how high the number is (curved calculation)
-function pixelConversion(n: number): number{
-  if(n < 1) return 1;
-
-  if(n >= 1 && n <= 100) {
-    return n;
-  } else if(n > 100 && n <= 300) {
-    return 100 + 5 * (n - 100);
-  } else if(n > 300 && n <= 500) {
-    return 100 + 5 * (300 - 100) + 10 * (n - 300);
-  } else if(n > 500 && n <= 1000) {
-    return 100 + 5 * (300 - 100) + 10 * (500 - 300) + 50 * (n - 500);
-  } else if(n > 1000 && n <= 2000) {
-    return 100 + 5 * (300 - 100) + 10 * (500 - 300) + 50 * (1000 - 500) + 100 * (n - 1000);
-  } else if(n > 2000) {
-    return 100 + 5 * (300 - 100) + 10 * (500 - 300) + 50 * (1000 - 500) + 100 * (2000 - 1000) + 500 * (n - 2000);
-  }
-
-  return n;
 }
 
 function SelectionSlider(props: SelectionSliderProps){
@@ -49,81 +28,18 @@ function SelectionSlider(props: SelectionSliderProps){
   const [extractedText, setExtractedText] = useState<string>("");
   const source = useSourceStore((state) => state.source);
 
-  // Calculate what the maximum slider value should be to reach the max after pixelConversion
-  // Uses binary search to find the inverse of pixelConversion
-  const calculateMaxSliderValue = useCallback((targetMax: number): number => {
-    // Binary search to find sliderValue such that pixelConversion(sliderValue) >= targetMax
-    let low = 1;
-    let high = 10000;
-    let result = 1;
-
-    while (low <= high) {
-      const mid = Math.floor((low + high) / 2);
-      const converted = pixelConversion(mid);
-
-      if(converted >= targetMax) {
-        result = mid;
-        high = mid - 1;
-      } else {
-        low = mid + 1;
-      }
-    }
-
-    return result;
-  }, []);
-
   // Calculate the max slider value based on the prop max
-  const maxSliderValue = useMemo(() => calculateMaxSliderValue(max), [max, calculateMaxSliderValue]);
+  const maxSliderValue = useMemo(() => calculateMaxPosition(max), [max]);
 
   // Convert slider value to actual curved value
   const convertedValue = useMemo(() => {
     const sliderPos = sliderValue[0] || 0;
-    if(sliderPos < 1) return min;
-
-    const converted = pixelConversion(sliderPos);
-
-    // Clamp to max based on type
-    let finalValue = converted;
-    if(typeId === "characters" && finalValue > 5000) {
-      finalValue = 5000;
-    } else if(typeId === "words" && finalValue > 2500) {
-      finalValue = 2500;
-    } else if(typeId === "sentences" && finalValue > 666) {
-      finalValue = 666;
-    } else if(typeId === "paragraphs" && finalValue > 333) {
-      finalValue = 333;
-    }
-
-    // Also clamp to the prop max
-    if(finalValue > max) {
-      finalValue = max;
-    }
-
-    return finalValue;
+    return positionToClampedValue(sliderPos, typeId, max, min);
   }, [sliderValue, typeId, max, min]);
 
   // Convert actual value back to slider position (for initial value)
   const valueToSliderPosition = useCallback((targetValue: number): number => {
-    if(targetValue <= min) return 0;
-
-    // Binary search to find slider position that gives us targetValue
-    let low = 1;
-    let high = maxSliderValue;
-    let result = 1;
-
-    while (low <= high) {
-      const mid = Math.floor((low + high) / 2);
-      const converted = pixelConversion(mid);
-
-      if(converted >= targetValue) {
-        result = mid;
-        high = mid - 1;
-      } else {
-        low = mid + 1;
-      }
-    }
-
-    return result;
+    return valueToPosition(targetValue, min, maxSliderValue);
   }, [min, maxSliderValue]);
 
   // Initialize slider value from prop value
@@ -136,31 +52,8 @@ function SelectionSlider(props: SelectionSliderProps){
   const handleSliderChange = useCallback((newValue: number[]) => {
     setSliderValue(newValue);
     if(onValueChange) {
-      // Calculate converted value directly from newValue
       const sliderPos = newValue[0] || 0;
-      if(sliderPos < 1) {
-        onValueChange([min]);
-        return;
-      }
-
-      let converted = pixelConversion(sliderPos);
-
-      // Clamp to max based on type
-      if(typeId === "characters" && converted > 5000) {
-        converted = 5000;
-      } else if(typeId === "words" && converted > 2500) {
-        converted = 2500;
-      } else if(typeId === "sentences" && converted > 666) {
-        converted = 666;
-      } else if(typeId === "paragraphs" && converted > 333) {
-        converted = 333;
-      }
-
-      // Also clamp to the prop max
-      if(converted > max) {
-        converted = max;
-      }
-
+      const converted = positionToClampedValue(sliderPos, typeId, max, min);
       onValueChange([converted]);
     }
   }, [onValueChange, typeId, max, min]);
@@ -168,9 +61,10 @@ function SelectionSlider(props: SelectionSliderProps){
   const handleSliderCommit = useCallback(async(newValue: number[]) => {
     setSliderValue(newValue);
 
-    // Calculate converted value directly from newValue
     const sliderPos = newValue[0] || 0;
-    if(sliderPos < 1) {
+    const converted = positionToClampedValue(sliderPos, typeId, max, min);
+
+    if(sliderPos < 1 || converted <= min) {
       // Reset to min after commit
       setSliderValue([0]);
       if(onValueCommit) {
@@ -180,24 +74,6 @@ function SelectionSlider(props: SelectionSliderProps){
         onValueChange([min]);
       }
       return;
-    }
-
-    let converted = pixelConversion(sliderPos);
-
-    // Clamp to max based on type
-    if(typeId === "characters" && converted > 5000) {
-      converted = 5000;
-    } else if(typeId === "words" && converted > 2500) {
-      converted = 2500;
-    } else if(typeId === "sentences" && converted > 666) {
-      converted = 666;
-    } else if(typeId === "paragraphs" && converted > 333) {
-      converted = 333;
-    }
-
-    // Also clamp to the prop max
-    if(converted > max) {
-      converted = max;
     }
 
     if(converted > min && source?.id) {
@@ -258,6 +134,8 @@ function SelectionSlider(props: SelectionSliderProps){
             step={1}
             onValueChange={handleSliderChange}
             onValueCommit={handleSliderCommit}
+            data-text-type={typeId}
+            data-text-amount={convertedValue}
             className={cn(
               "w-full",
               {

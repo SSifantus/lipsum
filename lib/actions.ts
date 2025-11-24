@@ -38,7 +38,7 @@ export async function sendForm(params: SendFormParams): Promise<SendFormResult>{
     if(response.ok) {
       return {
         success:true,
-        message:"Thank you for your message. Someone will get back to you shortly."
+        message:"Thank you for your message."
       };
     } else {
       const errorData = await response.json();
