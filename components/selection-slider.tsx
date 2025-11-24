@@ -15,7 +15,7 @@ export interface SelectionSliderProps {
   min: number;
   max: number;
   step: number;
-  typeId: "characters" | "words" | "sentences" | "paragraphs";
+  typeId: string;
   onValueChange?: (value: number[]) => void;
   onValueCommit?: (value: number[]) => void;
 }
