@@ -9,3 +9,4 @@ export * from "./select";
 export * from "./slider";
 export * from "./sonner";
 export * from "./textarea";
+export * from "./tool-tip";
