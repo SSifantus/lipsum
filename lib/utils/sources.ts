@@ -1,3 +1,4 @@
+import jeffData from "@/data/jeff.json";
 import legalData from "@/data/legal.json";
 import loremIpsumData from "@/data/lorem-ipsum.json";
 import pirateData from "@/data/pirate.json";
@@ -18,6 +19,7 @@ export interface SourceData {
 export const sources: SourceData[] = [
   loremIpsumData,
   legalData,
+  jeffData,
   pirateData,
   saganData,
   shakespeareData,
