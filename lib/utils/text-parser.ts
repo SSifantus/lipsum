@@ -113,24 +113,26 @@ export async function extractText(
 
   switch (type) {
     case "characters": {
-      if (amount >= text.length) {
-        extracted = text;
+      const cleanedText = cleanExtractedText(text, "characters");
+      if (amount >= cleanedText.length) {
+        extracted = cleanedText;
       } else {
-        const start = getRandomStartPosition(text.length, amount);
-        extracted = text.slice(start, start + amount);
+        const start = getRandomStartPosition(cleanedText.length, amount);
+        extracted = cleanedText.slice(start, start + amount);
       }
-      break;
+      return extracted;
     }
 
     case "words": {
-      const words = splitWords(text);
+      const cleanedText = cleanExtractedText(text, "words");
+      const words = splitWords(cleanedText);
       if (amount >= words.length) {
         extracted = words.join(" ");
       } else {
         const start = getRandomStartPosition(words.length, amount);
         extracted = words.slice(start, start + amount).join(" ");
       }
-      break;
+      return extracted;
     }
 
     case "sentences": {
