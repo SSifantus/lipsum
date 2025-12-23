@@ -1,6 +1,5 @@
 /**
- * Convert slider/column position into values depending on how high the number is (curved calculation)
- * Curve is heavily weighted at the beginning - 16% of slider should give ~40 characters
+ * Convert slider/column position into values
  */
 export function pixelConversion(n: number): number {
   if (n < 1) return 1;
@@ -38,8 +37,7 @@ export function pixelConversion(n: number): number {
 }
 
 /**
- * Calculate the maximum position value needed to reach a target max value after pixelConversion.
- * Uses binary search to find the inverse of pixelConversion.
+ * Calculate the maximum position value needed to reach a target max value after pixel conversion
  */
 export function calculateMaxPosition(targetMax: number, maxSearchRange: number = 10000): number {
   let low = 1;
@@ -62,7 +60,7 @@ export function calculateMaxPosition(targetMax: number, maxSearchRange: number =
 }
 
 /**
- * Convert a target value back to a position using binary search.
+ * Convert target value back to a position
  */
 export function valueToPosition(targetValue: number, minValue: number, maxPosition: number): number {
   if (targetValue <= minValue) return 0;
@@ -87,7 +85,7 @@ export function valueToPosition(targetValue: number, minValue: number, maxPositi
 }
 
 /**
- * Clamp a value based on the type ID and maximum value.
+ * Clamp value based on the type ID and max
  */
 export function clampValueByType(
   value: number,
@@ -116,7 +114,7 @@ export function clampValueByType(
 }
 
 /**
- * Convert a position to a clamped value based on type and max.
+ * Convert position to a clamped value based on type and max
  */
 export function positionToClampedValue(
   position: number,

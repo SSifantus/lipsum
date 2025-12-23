@@ -8,7 +8,7 @@
  */
 export function isDesktopDevice( userAgentString: string ): boolean {
   if ( !userAgentString ) {
-    // Default to desktop if user agent is not available
+    // Default to desktop if user agent not available
     return true;
   }
 
@@ -27,7 +27,6 @@ export function isDesktopDevice( userAgentString: string ): boolean {
   }
 
   // Check for touch devices that aren't mobile/tablet
-  // Modern laptops with touchscreens should still be considered desktop
   const touchDeviceRegex = /touch/i;
   if ( touchDeviceRegex.test( ua ) && !/windows/i.test( ua ) ) {
     return false;

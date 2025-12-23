@@ -61,11 +61,7 @@ function getRandomStartPosition(availableLength: number, neededLength: number): 
 }
 
 /**
- * Cleans extracted text based on type:
- * - Characters and words: strip all punctuation marks (periods, dashes, etc.)
- * - All except paragraphs: strip line breaks
- * - Characters: strip all spaces
- * - Words: strip double spaces (normalize to single spaces)
+ * Cleans extracted text based on type
  */
 function cleanExtractedText(text: string, type: TextType): string {
   let cleaned = text;

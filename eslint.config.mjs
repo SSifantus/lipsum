@@ -6,9 +6,8 @@ import importPlugin from "eslint-plugin-import";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  // Override default ignores of eslint-config-next.
   globalIgnores([
-    // Default ignores of eslint-config-next:
+    // Override default eslint-config-next ignores
     ".next/**",
     "out/**",
     "build/**",
