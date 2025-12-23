@@ -9,7 +9,7 @@ export function SourceSelector(){
 
   return (
     <Select value={source?.id || undefined} onValueChange={(value) => setSource(value)}>
-      <SelectTrigger size="sm" className="w-45">
+      <SelectTrigger size="sm" className="w-39 md:w-45">
         <SelectValue placeholder="Select a generator"/>
       </SelectTrigger>
       <SelectContent>

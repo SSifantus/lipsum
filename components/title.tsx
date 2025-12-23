@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { HyperText } from "@/components/ui/hyper-text";
 import { cn } from "@/lib";
-import { useSourceStore } from "@/stores";
 
 type TitleProps = {
   className?: string;
@@ -12,13 +11,11 @@ type TitleProps = {
 
 export function Title(props: TitleProps){
   const {className} = props;
-  const {source} = useSourceStore((state) => state);
   const {resolvedTheme} = useTheme();
   const [mounted, setMounted] = useState(false);
-  const label = source?.title;
 
-  // TODO: Fix
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -27,7 +24,7 @@ export function Title(props: TitleProps){
 
   return (
     <HyperText
-      className={cn(`bg-gradient-to-br ${isDark ? "from-white to-white/40" : "from-black to-black/40"} from-30% bg-clip-text leading-none text-transparent text-balance`, className)}>
+      className={cn(`bg-gradient-to-br ${isDark ? "from-white to-white/40" : "from-black to-black/40"} from-30% min-h-8 bg-clip-text leading-none text-transparent text-balance`, className)}>
       Lipsum Fast</HyperText>
   );
 }

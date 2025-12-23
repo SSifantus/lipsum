@@ -56,12 +56,9 @@ function Slider(props: ComponentProps<typeof SliderPrimitive.Root>){
           data-slot="slider-thumb"
           key={index}
           className={cn(
-            "border-border ring-ring/50 block h-[15vh] min-h-full w-4 shrink-0 border bg-white" +
-            " transition-[color,box-shadow]",
-            "hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50",
-            "after:content-[''] after:absolute after:top-0 after:left-0 after:w-0 after:h-full after:border-t-[50px]" +
-            " after:border-t-transparent after:border-l-[70px] after:border-l-white after:border-b-[50px]" +
-            " after:border-b-transparent"
+            "ring-ring/50 block h-[15vh] min-h-full w-8 shrink-0 bg-white" +
+            " transition-[color,box-shadow] rounded-r-full",
+            "hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
           )}
         />
       ))}
