@@ -8,36 +8,36 @@ import { SelectionPane } from "./selection-pane";
 
 const panes = [
   {
-    title:"Character",
-    id:"characters",
-    step:1,
-    min:0,
-    max:5000,
+    title: "Character",
+    id: "characters",
+    step: 1,
+    min: 0,
+    max: 5000,
   },
   {
-    title:"Word",
-    id:"words",
-    step:1,
-    min:0,
-    max:1000,
+    title: "Word",
+    id: "words",
+    step: 1,
+    min: 0,
+    max: 1000,
   },
   {
-    title:"Sentence",
-    id:"sentences",
-    step:1,
-    min:0,
-    max:250,
+    title: "Sentence",
+    id: "sentences",
+    step: 1,
+    min: 0,
+    max: 250,
   },
   {
-    title:"Paragraph",
-    id:"paragraphs",
-    step:1,
-    min:0,
-    max:100,
+    title: "Paragraph",
+    id: "paragraphs",
+    step: 1,
+    min: 0,
+    max: 100,
   },
 ];
 
-export function SelectionSurface(){
+export function SelectionSurface() {
 
   const [isDesktop, setIsDesktop] = useState<boolean>(true);
 
@@ -52,30 +52,31 @@ export function SelectionSurface(){
   const handleChange = (id: string, newValue: number) => {
     setValues((prev) => ({
       ...prev,
-      [id]:newValue,
+      [id]: newValue,
     }));
   };
 
-  // TODO: Fix
   useEffect(() => {
-    if(typeof window !== "undefined" && navigator.userAgent) {
+    if (typeof window !== "undefined" && navigator.userAgent) {
+      // This is intentional to detect device type after mount to prevent hydration mismatches
+      // eslint-disable-next-line react-compiler/react-compiler
       setIsDesktop(isDesktopDevice(navigator.userAgent));
     }
   }, []);
 
   return (
-    <div className={`w-full h-full ${isDesktop ? "grid grid-cols-4 grid-rows-1" : "flex flex-col"}`}>
-      {panes.map((pane, index) => (
+    <div className={ `w-full h-full ${isDesktop ? "grid grid-cols-4 grid-rows-1" : "flex flex-col"}` }>
+      { panes.map((pane, index) => (
         <SelectionPane
-          index={index}
-          isDesktop={isDesktop}
-          key={pane.id}
-          pane={{...pane, value:values[pane.id]}}
-          onChange={(value) => handleChange(pane.id, value)}
+          index={ index }
+          isDesktop={ isDesktop }
+          key={ pane.id }
+          pane={ { ...pane, value: values[pane.id] } }
+          onChange={ (value) => handleChange(pane.id, value) }
         />
-      ))}
+      )) }
       <div className="flex w-full items-center justify-between h-18 px-5 pb-0.5">
-        <Title className="min-w-fit whitespace-nowrap"/>
+        <Title className="min-w-fit whitespace-nowrap" />
       </div>
     </div>
   );
